@@ -38,7 +38,7 @@ publishing {
         register<MavenPublication>("release") {
             groupId = "ir.dorantech.centralportalpublish"
             artifactId = "centralportalpublish"
-            version = "1.0"
+            version = "1.1"
 
             afterEvaluate {
                 from(components["release"])
