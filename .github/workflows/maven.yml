@@ -19,13 +19,7 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
-
-      - name: Set up Maven
-        uses: actions/setup-java@v3
-        with:
-          java-version: '17'
-          distribution: 'maven'
-          maven-version: '3.8.5'
+          cache: 'maven'
 
       - name: Set environment variables
         run: |
