@@ -31,7 +31,6 @@ jobs:
           pwd
           ls -la
 
-
       - name: Build with Maven
-        working-directory: CentralPortalPublish
+        working-directory: centralportalpublish
         run: mvn clean deploy
