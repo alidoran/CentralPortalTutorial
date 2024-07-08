@@ -2,11 +2,9 @@ name: CI for CentralPortalPublish
 
 on:
   push:
-    paths:
-      - 'CentralPortalPublish/**'
+    branches: [ "master" ]
   pull_request:
-    paths:
-      - 'CentralPortalPublish/**'
+    branches: [ "master" ]
 
 jobs:
   build:
