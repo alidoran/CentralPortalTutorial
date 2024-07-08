@@ -24,8 +24,7 @@ jobs:
       - name: Create settings.xml
         run: |
           mkdir -p ~/.m2
-          echo '<settings><servers><server><id>central</id><username>${secrets.CENTRAL_USER_NAME}</username><password>${secrets.CENTRAL_PASSWORD}</password></server></servers></settings>' > ~/.m2/settings.xml
-          echo '<settings><servers><server><id>central</id><username>${{ secrets.CENTRAL_USER_NAME }}</username><password>${{ secrets.CENTRAL_PASSWORD }}</password></server></servers></settings>'
+          echo '<settings><servers><server><id>central</id><username>${{ secrets.CENTRAL_USER_NAME }}</username><password>${{ secrets.CENTRAL_PASSWORD }}</password></server></servers></settings>' > ~/.m2/settings.xml
       - name: Print working directory and list files
         run: |
           pwd

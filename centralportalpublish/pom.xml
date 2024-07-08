@@ -93,7 +93,7 @@
                 <configuration>
                     <gpgExecutable>gpg</gpgExecutable>
                     <gpgKeyname>6A6137E7883106F506B7EA7B4D1116C63EDE4F24</gpgKeyname>
-                    <gpgPassphrase>${env.GPG_PASSPHRASE}</gpgPassphrase>
+                    <gpgPassphrase>${secrets.GPG_PASSPHRASE}</gpgPassphrase>
                     <useAgent>true</useAgent>
                     <args>
                         <arg>--pinentry-mode</arg>
