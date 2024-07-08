@@ -1,0 +1,39 @@
+name: Java CI with Maven
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+
+      - name: Set up Maven
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'maven'
+          maven-version: '3.8.5'
+
+      - name: Set environment variables
+        run: |
+          echo "CENTRAL_USERNAME=${{ secrets.CENTRAL_USER_NAME }}" >> $GITHUB_ENV
+          echo "CENTRAL_PASSWORD=${{ secrets.CENTRAL_PASSWORD }}" >> $GITHUB_ENV
+
+      - name: Create settings.xml
+        run: |
+          mkdir -p ~/.m2
+          echo '<settings><servers><server><id>ossrh</id><username>${secrets.CENTRAL_USER_NAME}</username><password>${secrets.CENTRAL_PASSWORD}</password></server></servers></settings>' > ~/.m2/settings.xml
+
+      - name: Build with Maven
+        run: mvn clean deploy
