@@ -90,16 +90,6 @@
                         </goals>
                     </execution>
                 </executions>
-                <configuration>
-                    <gpgExecutable>gpg</gpgExecutable>
-                    <gpgKeyname>5DA45D7D5A13A8EDEBEC19A688E6153EE2913F4D</gpgKeyname>
-                    <gpgPassphrase>${{ secrets.GPG_PASSPHRASE }}</gpgPassphrase>
-                    <useAgent>true</useAgent>
-                    <args>
-                        <arg>--pinentry-mode</arg>
-                        <arg>loopback</arg>
-                    </args>
-                </configuration>
             </plugin>
         </plugins>
     </build>

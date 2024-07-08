@@ -25,10 +25,15 @@ jobs:
         run: |
           mkdir -p ~/.m2
           echo '<settings><servers><server><id>central</id><username>${{ secrets.CENTRAL_USER_NAME }}</username><password>${{ secrets.CENTRAL_PASSWORD }}</password></server></servers></settings>' > ~/.m2/settings.xml
-      - name: Print working directory and list files
+
+      - name: Setup GPG
         run: |
-          pwd
-          ls -la
+          echo "${{ secrets.GPG_PRIVATE_KEY }}" | gpg --batch --import
+          echo "${{ secrets.GPG_PASSPHRASE }}" | gpg --batch --yes --pinentry-mode loopback --passphrase-fd 0 --edit-key YOUR_KEY_ID trust quit
+      - name: Use GPG Key
+        run: |
+          # Example command to sign a file
+          gpg --batch --yes --pinentry-mode loopback --passphrase "${{ secrets.GPG_PASSPHRASE }}" --output signed_file.gpg --sign file_to_sign.txt
 
       - name: Build with Maven
         working-directory: centralportalpublish
