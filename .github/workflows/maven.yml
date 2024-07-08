@@ -42,7 +42,7 @@ jobs:
                 <passphrase>\${env.GPG_PASSPHRASE}</passphrase>
               </server>
             </servers>
-          </settings>" > $HOME/.m2/settings.xml
+          </settings>" > $HOME/.m2/settings-security.xml
       - name: Build with Maven
         working-directory: centralportalpublish
         run: mvn clean deploy -B -Dgpg.skip=false
