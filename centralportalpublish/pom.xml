@@ -10,7 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>ir.dorantech.centralportalpublish</groupId>
     <artifactId>centralportalpublish</artifactId>
-    <version>1.1</version>
+    <version>1.2</version>
     <packaging>jar</packaging>
     <name>centralportalpublish</name>
     <description>Central Portal Tutorial</description>
@@ -90,6 +90,16 @@
                         </goals>
                     </execution>
                 </executions>
+                <configuration>
+                    <gpgExecutable>gpg</gpgExecutable>
+                    <gpgKeyname>6A6137E7883106F506B7EA7B4D1116C63EDE4F24</gpgKeyname>
+                    <gpgPassphrase>${env.GPG_PASSPHRASE}</gpgPassphrase>
+                    <useAgent>true</useAgent>
+                    <args>
+                        <arg>--pinentry-mode</arg>
+                        <arg>loopback</arg>
+                    </args>
+                </configuration>
             </plugin>
         </plugins>
     </build>
