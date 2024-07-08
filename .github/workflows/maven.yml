@@ -47,8 +47,3 @@ jobs:
         run: mvn clean deploy -B -Dgpg.skip=false
       - name: Verify GPG Signing
         run: gpg --list-keys && gpg --list-secret-keys
-
-
-
-
-
