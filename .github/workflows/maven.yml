@@ -1,10 +1,12 @@
-name: Java CI with Maven
+name: CI for CentralPortalPublish
 
 on:
   push:
-    branches: [ "master" ]
+    paths:
+      - 'CentralPortalPublish/**'
   pull_request:
-    branches: [ "master" ]
+    paths:
+      - 'CentralPortalPublish/**'
 
 jobs:
   build:
@@ -24,15 +26,10 @@ jobs:
       - name: Navigate to CentralPortalPublish
         run: cd CentralPortalPublish
 
-      - name: Set environment variables
-        run: |
-          echo "CENTRAL_USERNAME=${{ secrets.CENTRAL_USER_NAME }}" >> $GITHUB_ENV
-          echo "CENTRAL_PASSWORD=${{ secrets.CENTRAL_PASSWORD }}" >> $GITHUB_ENV
-
       - name: Create settings.xml
         run: |
           mkdir -p ~/.m2
-          echo '<settings><servers><server><id>ossrh</id><username>${secrets.CENTRAL_USER_NAME}</username><password>${secrets.CENTRAL_PASSWORD}</password></server></servers></settings>' > ~/.m2/settings.xml
+          echo '<settings><servers><server><id>central</id><username>${secrets.CENTRAL_USER_NAME}</username><password>${secrets.CENTRAL_PASSWORD}</password></server></servers></settings>' > ~/.m2/settings.xml
 
       - name: Build with Maven
         run: mvn clean deploy
