@@ -21,6 +21,9 @@ jobs:
           distribution: 'temurin'
           cache: 'maven'
 
+      - name: Navigate to CentralPortalPublish
+        run: cd CentralPortalPublish
+
       - name: Set environment variables
         run: |
           echo "CENTRAL_USERNAME=${{ secrets.CENTRAL_USER_NAME }}" >> $GITHUB_ENV
