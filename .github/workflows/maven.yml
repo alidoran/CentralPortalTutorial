@@ -26,15 +26,30 @@ jobs:
           mkdir -p ~/.m2
           echo '<settings><servers><server><id>central</id><username>${{ secrets.CENTRAL_USER_NAME }}</username><password>${{ secrets.CENTRAL_PASSWORD }}</password></server></servers></settings>' > ~/.m2/settings.xml
 
-      - name: Setup GPG
+      - name: Import GPG key
+        env:
+          GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
         run: |
-          echo "${{ secrets.GPG_PRIVATE_KEY }}" | gpg --batch --import
-          echo "${{ secrets.GPG_PASSPHRASE }}" | gpg --batch --yes --pinentry-mode loopback --passphrase-fd 0 --edit-key YOUR_KEY_ID trust quit
-      - name: Use GPG Key
+          echo "$GPG_PRIVATE_KEY" | gpg --batch --import
+          echo "$GPG_PASSPHRASE" | gpg --batch --yes --pinentry-mode loopback --passphrase-fd 0 --edit-key $(gpg --list-keys --with-colons | awk -F: '/^pub/ { print $5 }') trust quit
+      - name: Configure Maven for GPG
         run: |
-          # Example command to sign a file
-          gpg --batch --yes --pinentry-mode loopback --passphrase "${{ secrets.GPG_PASSPHRASE }}" --output signed_file.gpg --sign file_to_sign.txt
-
+          mkdir -p $HOME/.m2
+          echo "<settings>
+            <servers>
+              <server>
+                <id>gpg.passphrase</id>
+                <passphrase>\${env.GPG_PASSPHRASE}</passphrase>
+              </server>
+            </servers>
+          </settings>" > $HOME/.m2/settings.xml
       - name: Build with Maven
-        working-directory: centralportalpublish
-        run: mvn clean deploy
+        run: mvn clean deploy -B -Dgpg.skip=false
+      - name: Verify GPG Signing
+        run: gpg --list-keys && gpg --list-secret-keys
+
+
+
+
+
