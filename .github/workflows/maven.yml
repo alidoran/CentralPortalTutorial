@@ -25,9 +25,10 @@ jobs:
         env:
           GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
         run: |
-          echo "$GPG_PRIVATE_KEY" | gpg --batch --import
-          echo "use-agent" >> ~/.gnupg/gpg.conf
-          echo "pinentry-mode loopback" >> ~/.gnupg/gpg.conf
+          echo "$GPG_PRIVATE_KEY" | tr -d '\r' | gpg --batch --import
+          echo "no-tty" >> ~/.gnupg/gpg.conf
+          echo "batch" >> ~/.gnupg/gpg.conf
+
       - name: Set GPG key trust level
         run: |
           KEY_ID=$(gpg --list-keys --with-colons | awk -F: '/^pub/ { print $5 }')
