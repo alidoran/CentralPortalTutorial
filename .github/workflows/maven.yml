@@ -50,6 +50,8 @@ jobs:
           </settings>" > $HOME/.m2/settings-security.xml
       - name: Build with Maven
         working-directory: centralportalpublish
+        env:
+          GPG_TTY: $(tty)
         run: mvn clean deploy -B -Dgpg.skip=false
       - name: Verify GPG Signing
         run: gpg --list-keys && gpg --list-secret-keys
