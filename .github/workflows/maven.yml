@@ -43,7 +43,7 @@ jobs:
                 <passphrase>\${env.GPG_PASSPHRASE}</passphrase>
               </server>
             </servers>
-          </settings>" > $HOME/.m2/settings.xml
+          </settings>" > $HOME/.m2/settings-security.xml
       - name: Build with Maven and sign artifacts
         env:
           GPG_TTY: $(tty)
