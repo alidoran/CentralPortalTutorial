@@ -72,4 +72,4 @@ jobs:
         env:
           GPG_TTY: $(tty)
         working-directory: centralportalpublish
-        run: mvn clean deploy
+        run: mvn clean deploy -B -Dgpg.skip=false -Dgpg.useagent=true
