@@ -21,8 +21,17 @@ jobs:
           distribution: 'temurin'
           cache: 'maven'
 
+      - name: Import GPG key
+        env:
+          GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+        run: |
+          echo "$GPG_PRIVATE_KEY" | gpg --batch --import
+          echo "use-agent" >> ~/.gnupg/gpg.conf
+          echo "pinentry-mode loopback" >> ~/.gnupg/gpg.conf
+
       - name: Configure Maven for GPG
         env:
+          GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
           GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
           CENTRAL_USERNAME: ${{ secrets.CENTRAL_USERNAME }}
           CENTRAL_PASSWORD: ${{ secrets.CENTRAL_PASSWORD }}
@@ -54,13 +63,6 @@ jobs:
                     <activeProfile>gpg</activeProfile>
                   </activeProfiles>
                 </settings>" > $HOME/.m2/settings-security.xml
-
-      - name: Import GPG key
-        env:
-          GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
-        run: |
-          echo "$GPG_PRIVATE_KEY" | gpg --batch --import
-
       - name: Build with Maven and sign artifacts
         working-directory: centralportalpublish
         run: mvn clean deploy
