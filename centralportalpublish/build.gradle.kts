@@ -1,7 +1,6 @@
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
-    id("maven-publish")
 }
 
 android {
@@ -30,20 +29,6 @@ android {
     }
     kotlinOptions {
         jvmTarget = "1.8"
-    }
-}
-
-publishing {
-    publications {
-        register<MavenPublication>("release") {
-            groupId = "ir.dorantech.centralportalpublish"
-            artifactId = "centralportalpublish"
-            version = "1.1"
-
-            afterEvaluate {
-                from(components["release"])
-            }
-        }
     }
 }
 

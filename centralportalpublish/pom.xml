@@ -91,12 +91,12 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <keyname>D4B5EB12EF08F478E91C471EBF26E367A34A03BF</keyname> <!-- Use your key ID here -->
+                    <keyname>107875E9443492FCE8A6E773EFBAC5A2A2810158</keyname> <!-- Use your key ID here -->
                     <gpgArguments>
                         <arg>--pinentry-mode</arg>
                         <arg>loopback</arg>
                     </gpgArguments>
-                    <passphrase>${{ secrets.GPG_PASSPHRASE }}</passphrase>
+                    <passphrase>${env.GPG_PASSPHRASE}</passphrase>
                 </configuration>
             </plugin>
         </plugins>

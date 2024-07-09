@@ -25,6 +25,8 @@ jobs:
         env:
           GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
           GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+          CENTRAL_USERNAME: ${{ secrets.CENTRAL_USERNAME }}
+          CENTRAL_PASSWORD: ${{ secrets.CENTRAL_PASSWORD }}
         run: |
           echo "$GPG_PRIVATE_KEY" | gpg --batch --import
           echo "use-agent" >> ~/.gnupg/gpg.conf
@@ -37,15 +39,33 @@ jobs:
         run: |
           mkdir -p $HOME/.m2
           echo "<settings>
-            <servers>
-              <server>
-                <id>gpg.passphrase</id>
-                <passphrase>\${env.GPG_PASSPHRASE}</passphrase>
-              </server>
-            </servers>
-          </settings>" > $HOME/.m2/settings-security.xml
+                <servers>
+                  <server>
+                    <id>central</id>
+                    <username>$CENTRAL_USERNAME</username>
+                    <password>$CENTRAL_PASSWORD</password>
+                  </server>
+                  <server>
+                    <id>gpg.passphrase</id>
+                    <passphrase>$GPG_PASSPHRASE</passphrase>
+                  </server>
+                </servers>
+                <profiles>
+                  <profile>
+                    <id>gpg</id>
+                    <properties>
+                      <gpg.executable>gpg</gpg.executable>
+                      <gpg.keyname>alidoran</gpg.keyname>
+                      <gpg.passphraseServerId>gpg.passphrase</gpg.passphraseServerId>
+                    </properties>
+                  </profile>
+                </profiles>
+                <activeProfiles>
+                  <activeProfile>gpg</activeProfile>
+                </activeProfiles>
+                </settings>" > $HOME/.m2/settings-security.xml
       - name: Build with Maven and sign artifacts
         env:
           GPG_TTY: $(tty)
         working-directory: centralportalpublish
-        run: mvn clean deploy -B -Dgpg.skip=false -Dgpg.useagent=true
+        run: mvn clean deploy
