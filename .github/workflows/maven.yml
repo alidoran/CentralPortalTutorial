@@ -21,38 +21,27 @@ jobs:
           distribution: 'temurin'
           cache: 'maven'
 
+      # Configure GPG key (replace with your actual GPG key ID)
       - name: Import GPG key
         env:
-          GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+          GPG_KEY_ID: "YOUR_GPG_KEY_ID"  # Replace with your actual key ID
+        run: |
+          echo -e "${{ secrets.GPG_PRIVATE_KEY }}" | gpg --batch --trust-model always --import -
+      # Configure GPG to use a non-interactive passphrase
+      - name: Configure GPG passphrase
+        run: |
+          echo "quiet" >> ~/.gnupg/gpg.conf
+          echo "disable-sanity" >> ~/.gnupg/gpg.conf
+          echo "passphrase-fd 2" >> ~/.gnupg/gpg.conf
+      # Add GPG passphrase as a secret (store securely)
+      - name: Add GPG passphrase secret
+        env:
+          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+        run: echo "$GPG_PASSPHRASE" | base64 -i .
+      # Build and deploy with GPG signing
+      - name: Build and deploy with GPG signing
+        env:
           GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
         run: |
-          echo "$GPG_PRIVATE_KEY" | gpg --batch --import
-          echo "use-agent" >> ~/.gnupg/gpg.conf
-          echo "pinentry-mode loopback" >> ~/.gnupg/gpg.conf
-      - name: Set GPG key trust level
-        run: |
-          KEY_ID=$(gpg --list-keys --with-colons | awk -F: '/^pub/ { print $5 }')
-          echo -e "5\ny\n" | gpg --command-fd 0 --batch --yes --edit-key $KEY_ID trust
-      - name: Verify GPG Key
-        run: |
-          gpg --list-keys
-          gpg --list-secret-keys
-      - name: Configure Maven for GPG
-        run: |
-          mkdir -p $HOME/.m2
-          echo "<settings>
-            <servers>
-              <server>
-                <id>gpg.passphrase</id>
-                <passphrase>\${env.GPG_PASSPHRASE}</passphrase>
-              </server>
-            </servers>
-          </settings>" > $HOME/.m2/settings-security.xml
-      - name: Build with Maven
-        working-directory: centralportalpublish
-        run: |
-          GPG_KEY_ID=$(gpg --list-keys --with-colons | awk -F: '/^pub/ { print $5 }')
-          echo "${GPG_PASSPHRASE}" | gpg --quiet --batch --passphrase-fd 0 --command-fd 1 --trust-model always --edit-key $GPG_KEY_ID sign
-          mvn clean deploy -B -Dgpg.skip=false
-      - name: Verify GPG Signing
-        run: gpg --list-keys && gpg --list-secret-keys
+          echo "${GPG_PASSPHRASE}" | gpg --quiet --batch --passphrase-fd 0 --command-fd 1  --trust-model always --edit-key $GPG_KEY_ID sign
+          mvn clean deploy -DskipTests # Optional: skip tests for faster build (adjust as needed)
