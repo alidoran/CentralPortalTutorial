@@ -24,7 +24,6 @@ jobs:
       - name: Configure Maven for GPG
         env:
           GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
-          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
           CENTRAL_USERNAME: ${{ secrets.CENTRAL_USERNAME }}
           CENTRAL_PASSWORD: ${{ secrets.CENTRAL_PASSWORD }}
         run: |
@@ -55,6 +54,13 @@ jobs:
                     <activeProfile>gpg</activeProfile>
                   </activeProfiles>
                 </settings>" > $HOME/.m2/settings-security.xml
+
+      - name: Import GPG key
+        env:
+          GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+        run: |
+          echo "$GPG_PRIVATE_KEY" | gpg --batch --import
+
       - name: Build with Maven and sign artifacts
         working-directory: centralportalpublish
         run: mvn clean deploy
