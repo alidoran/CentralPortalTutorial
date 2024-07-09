@@ -31,8 +31,6 @@ jobs:
       - name: Configure GPG passphrase
         run: |
           echo "quiet" >> ~/.gnupg/gpg.conf
-          echo "disable-sanity" >> ~/.gnupg/gpg.conf
-          echo "passphrase-fd 2" >> ~/.gnupg/gpg.conf
       # Add GPG passphrase as a secret (store securely)
       - name: Add GPG passphrase secret
         env:
