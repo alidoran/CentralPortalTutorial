@@ -41,5 +41,5 @@ jobs:
         env:
           GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
         run: |
-          echo "${GPG_PASSPHRASE}" | gpg --quiet --batch --passphrase-fd 0 --command-fd 1  --trust-model always --edit-key $GPG_KEY_ID sign
+          echo "${GPG_PASSPHRASE}" | gpg --quiet --batch --passphrase-fd 0 --command-fd 1  --trust-model always --sign-key $GPG_KEY_ID
           mvn clean deploy -DskipTests # Optional: skip tests for faster build (adjust as needed)
