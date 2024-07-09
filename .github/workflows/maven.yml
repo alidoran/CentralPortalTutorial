@@ -50,7 +50,8 @@ jobs:
           </settings>" > $HOME/.m2/settings-security.xml
       - name: Build with Maven
         working-directory: centralportalpublish
-        run:
+        run: |
+          GPG_KEY_ID=$(gpg --list-keys --with-colons | awk -F: '/^pub/ { print $5 }')
           echo "${GPG_PASSPHRASE}" | gpg --quiet --batch --passphrase-fd 0 --command-fd 1 --trust-model always --edit-key $GPG_KEY_ID sign
           mvn clean deploy -B -Dgpg.skip=false
       - name: Verify GPG Signing
