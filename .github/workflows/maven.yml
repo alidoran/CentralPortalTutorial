@@ -37,7 +37,7 @@ jobs:
       - name: Add GPG passphrase secret
         env:
           GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
-        run: echo "$GPG_PASSPHRASE" | base64 -i .
+        run: echo ""
       # Build and deploy with GPG signing
       - name: Build and deploy with GPG signing
         env:
