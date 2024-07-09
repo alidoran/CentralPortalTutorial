@@ -24,9 +24,8 @@ jobs:
       - name: Import GPG key
         env:
           GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
-          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
         run: |
-          echo "$GPG_PRIVATE_KEY" | gpg --batch --import
+          echo "${env.GPG_PRIVATE_KEY}" | gpg --batch --import
           echo "use-agent" >> ~/.gnupg/gpg.conf
           echo "pinentry-mode loopback" >> ~/.gnupg/gpg.conf
       - name: Set GPG key trust level
@@ -36,7 +35,6 @@ jobs:
 
       - name: Configure Maven for GPG
         env:
-          GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
           GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
           CENTRAL_USERNAME: ${{ secrets.CENTRAL_USERNAME }}
           CENTRAL_PASSWORD: ${{ secrets.CENTRAL_PASSWORD }}
@@ -46,12 +44,12 @@ jobs:
                   <servers>
                     <server>
                       <id>central</id>
-                      <username>$CENTRAL_USERNAME</username>
-                      <password>$CENTRAL_PASSWORD</password>
+                      <username>${env.CENTRAL_USERNAME}</username>
+                      <password>${env.CENTRAL_PASSWORD}</password>
                     </server>
                     <server>
                       <id>gpg.passphrase</id>
-                      <passphrase>$GPG_PASSPHRASE</passphrase>
+                      <passphrase>${env.GPG_PASSPHRASE}</passphrase>
                     </server>
                   </servers>
                   <profiles>
