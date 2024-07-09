@@ -21,51 +21,40 @@ jobs:
           distribution: 'temurin'
           cache: 'maven'
 
-      - name: Import GPG key
+      - name: Configure Maven for GPG
         env:
           GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
           GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
           CENTRAL_USERNAME: ${{ secrets.CENTRAL_USERNAME }}
           CENTRAL_PASSWORD: ${{ secrets.CENTRAL_PASSWORD }}
         run: |
-          echo "$GPG_PRIVATE_KEY" | gpg --batch --import
-          echo "use-agent" >> ~/.gnupg/gpg.conf
-          echo "pinentry-mode loopback" >> ~/.gnupg/gpg.conf
-      - name: Set GPG key trust level
-        run: |
-          KEY_ID=$(gpg --list-keys --with-colons | awk -F: '/^pub/ { print $5 }')
-          echo -e "5\ny\n" | gpg --command-fd 0 --batch --yes --edit-key $KEY_ID trust
-      - name: Configure Maven for GPG
-        run: |
           mkdir -p $HOME/.m2
           echo "<settings>
-                <servers>
-                  <server>
-                    <id>central</id>
-                    <username>$CENTRAL_USERNAME</username>
-                    <password>$CENTRAL_PASSWORD</password>
-                  </server>
-                  <server>
-                    <id>gpg.passphrase</id>
-                    <passphrase>$GPG_PASSPHRASE</passphrase>
-                  </server>
-                </servers>
-                <profiles>
-                  <profile>
-                    <id>gpg</id>
-                    <properties>
-                      <gpg.executable>gpg</gpg.executable>
-                      <gpg.keyname>alidoran</gpg.keyname>
-                      <gpg.passphraseServerId>gpg.passphrase</gpg.passphraseServerId>
-                    </properties>
-                  </profile>
-                </profiles>
-                <activeProfiles>
-                  <activeProfile>gpg</activeProfile>
-                </activeProfiles>
+                  <servers>
+                    <server>
+                      <id>central</id>
+                      <username>$CENTRAL_USERNAME</username>
+                      <password>$CENTRAL_PASSWORD</password>
+                    </server>
+                    <server>
+                      <id>gpg.passphrase</id>
+                      <passphrase>$GPG_PASSPHRASE</passphrase>
+                    </server>
+                  </servers>
+                  <profiles>
+                    <profile>
+                      <id>gpg</id>
+                      <properties>
+                        <gpg.executable>gpg</gpg.executable>
+                        <gpg.keyname>alidoran</gpg.keyname>
+                        <gpg.passphraseServerId>gpg.passphrase</gpg.passphraseServerId>
+                      </properties>
+                    </profile>
+                  </profiles>
+                  <activeProfiles>
+                    <activeProfile>gpg</activeProfile>
+                  </activeProfiles>
                 </settings>" > $HOME/.m2/settings-security.xml
       - name: Build with Maven and sign artifacts
-        env:
-          GPG_TTY: $(tty)
         working-directory: centralportalpublish
         run: mvn clean deploy
