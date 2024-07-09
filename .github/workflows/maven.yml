@@ -47,5 +47,5 @@ jobs:
       - name: Build with Maven and sign artifacts
         env:
           GPG_TTY: $(tty)
-          working-directory: centralportalpublish
+        working-directory: centralportalpublish
         run: mvn clean deploy -B -Dgpg.skip=false -Dgpg.useagent=true
