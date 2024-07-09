@@ -64,5 +64,7 @@ jobs:
                   </activeProfiles>
                 </settings>" > $HOME/.m2/settings-security.xml
       - name: Build with Maven and sign artifacts
+        env:
+          GPG_TTY: $(tty)
         working-directory: centralportalpublish
         run: mvn clean deploy
