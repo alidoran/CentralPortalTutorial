@@ -73,4 +73,4 @@ jobs:
         working-directory: centralportalpublish
         run: |
           export GPG_TTY=$(tty)
-          mvn clean deploy -B -Dgpg.skip=false -Dgpg.useagent=true
+          mvn clean deploy
