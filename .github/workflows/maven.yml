@@ -40,6 +40,7 @@ jobs:
           GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
           CENTRAL_USERNAME: ${{ secrets.CENTRAL_USERNAME }}
           CENTRAL_PASSWORD: ${{ secrets.CENTRAL_PASSWORD }}
+          GPG_KEY_NAME: ${{ secrets.GPG_KEY_NAME }}
         run: |
           mkdir -p $HOME/.m2
           echo "<settings>
@@ -59,8 +60,8 @@ jobs:
                       <id>gpg</id>
                       <properties>
                         <gpg.executable>gpg</gpg.executable>
-                        <gpg.keyname>alidoran</gpg.keyname>
-                        <gpg.passphraseServerId>gpg.passphrase</gpg.passphraseServerId>
+                        <gpg.keyname>$GPG_KEY_NAME</gpg.keyname>
+                        <gpg.passphraseServerId>$GPG_PASSPHRASE</gpg.passphraseServerId>
                       </properties>
                     </profile>
                   </profiles>
