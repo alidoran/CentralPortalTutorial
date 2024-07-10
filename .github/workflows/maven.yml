@@ -71,7 +71,7 @@ jobs:
         env:
           GPG_TTY: $(tty)
           GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
-          GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+          GPG_KEY_NAME: ${{ secrets.GPG_KEY_NAME }}
         working-directory: centralportalpublish
         run: |
           export GPG_TTY=$(tty)
