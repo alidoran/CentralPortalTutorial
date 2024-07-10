@@ -116,14 +116,14 @@
                         </goals>
                     </execution>
                 </executions>
-<!--                <configuration>-->
-<!--                    <keyname>${{ secrets.GPG_PRIVATE_KEY }}</keyname> &lt;!&ndash; Use your key ID here &ndash;&gt;-->
-<!--                    <gpgArguments>-->
-<!--                        <arg>&#45;&#45;pinentry-mode</arg>-->
-<!--                        <arg>loopback</arg>-->
-<!--                    </gpgArguments>-->
-<!--                    <passphrase>${{ secrets.GPG_PASSPHRASE }}</passphrase>-->
-<!--                </configuration>-->
+                <configuration>
+                    <keyname>107875E9443492FCE8A6E773EFBAC5A2A2810158</keyname> <!-- Use your key ID here -->
+                    <gpgArguments>
+                        <arg>--pinentry-mode</arg>
+                        <arg>loopback</arg>
+                    </gpgArguments>
+                    <passphrase>${env.GPG_PASSPHRASE}</passphrase>
+                </configuration>
             </plugin>
         </plugins>
     </build>
