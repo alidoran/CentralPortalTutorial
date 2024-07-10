@@ -70,6 +70,8 @@ jobs:
       - name: Build with Maven and sign artifacts
         env:
           GPG_TTY: $(tty)
+          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+          GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
         working-directory: centralportalpublish
         run: |
           export GPG_TTY=$(tty)
