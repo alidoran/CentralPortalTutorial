@@ -23,9 +23,10 @@ jobs:
 
       - name: Import GPG key
         env:
-          GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+          GPG_PRIVATE_KEY_BASE64: ${{ secrets.GPG_PRIVATE_KEY_BASE64 }}
         run: |
-          echo "$GPG_PRIVATE_KEY" | tr -d '\r' | gpg --batch --import
+          echo "$GPG_PRIVATE_KEY_BASE64" | base64 --decode > private-key.asc
+          gpg --batch --import private-key.asc
           echo "no-tty" >> ~/.gnupg/gpg.conf
           echo "batch" >> ~/.gnupg/gpg.conf
 
